@@ -3,10 +3,10 @@ variable "demo_app_cluster_name" {
   type        = string
 }
 
-# variable "availability_zones" {
-#   description = "eu-central-1a AZs"
-#   type        = list(string)
-# }
+variable "availability_zones" {
+  description = "eu-central-1a AZs"
+  type        = list(string)
+}
 
 variable "demo_app_task_famliy" {
   description = "ECS Task Family"
@@ -45,25 +45,5 @@ variable "target_group_name" {
 
 variable "demo_app_service_name" {
   description = "ECS Service Name"
-  type        = string
-}
-
-variable "subnet_id" {
-  description = "Subnet ID"
-  type        = string
-}
-
-# variable "subnet_id_b" {
-#     description = "Subnet ID"
-#     type = string
-# }
-
-variable "security_group_id" {
-  description = "Security group ID"
-  type        = string
-}
-
-variable "vpc_id" {
-  description = "VPC ID"
   type        = string
 }

@@ -1,4 +1,5 @@
 resource "aws_db_instance" "mysql_db" {
+  identifier             = var.identifier
   allocated_storage      = 10
   db_name                = var.db_name
   engine                 = var.engine
@@ -9,6 +10,4 @@ resource "aws_db_instance" "mysql_db" {
   parameter_group_name   = var.parameter_group_name
   skip_final_snapshot    = true
   publicly_accessible    = true
-  # vpc_security_group_ids = [ var.vpc_security_group_ids ]
-  # db_subnet_group_name   = var.db_subnet_group_name 
 }

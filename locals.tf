@@ -5,7 +5,7 @@ locals {
   ecr_repo_name = "ecr-repo"
 
   demo_app_cluster_name        = "demo-app-cluster"
-  availability_zones           = ["eu-central-1a", "eu-central-1b"]
+  availability_zones           = ["eu-central-1a", "eu-central-1b","eu-central-1c"]
   demo_app_task_famliy         = "demo-app-task"
   container_port               = 5000
   demo_app_task_name           = "demo-app-task"

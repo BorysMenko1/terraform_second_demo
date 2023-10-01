@@ -8,36 +8,31 @@
 #   iam_profile_name        = module.iam_role.profile_name
 # }
 
-# module "ecsCluster" {
-#   source = "./modules/ecs"
+module "ecsCluster" {
+  source = "./modules/ecs"
 
-#   vpc_id    = module.my_vcp.vpc_id
-#   subnet_id = module.my_subnet.subnet_id
-#   # subnet_id_b = module.my_subnet.subnet_id
-#   security_group_id = module.security_group.sg_id
+  demo_app_cluster_name = local.demo_app_cluster_name
+  availability_zones    = local.availability_zones
 
-#   demo_app_cluster_name = local.demo_app_cluster_name
-#   # availability_zones    = local.availability_zones
+  demo_app_task_famliy         = local.demo_app_task_famliy
+  ecr_repo_url                 = module.ecrRepo.repository_url
+  container_port               = local.container_port
+  demo_app_task_name           = local.demo_app_task_name
+  ecs_task_execution_role_name = local.ecs_task_execution_role_name
 
-#   demo_app_task_famliy         = local.demo_app_task_famliy
-#   ecr_repo_url                 = module.ecrRepo.repository_url
-#   container_port               = local.container_port
-#   demo_app_task_name           = local.demo_app_task_name
-#   ecs_task_execution_role_name = local.ecs_task_execution_role_name
-
-#   application_load_balancer_name = local.application_load_balancer_name
-#   target_group_name              = local.target_group_name
-#   demo_app_service_name          = local.demo_app_service_name
-# }
+  application_load_balancer_name = local.application_load_balancer_name
+  target_group_name              = local.target_group_name
+  demo_app_service_name          = local.demo_app_service_name
+}
 
 
-# module "my_key_pair" {
-#   source = "./modules/key_pairs"
-# }
+module "my_key_pair" {
+  source = "./modules/key_pairs"
+}
 
-# module "iam_role" {
-#   source = "./modules/roles"
-# }
+module "iam_role" {
+  source = "./modules/roles"
+}
 
 module "my_vcp" {
   source = "./modules/vpc"
@@ -56,15 +51,8 @@ module "security_group" {
   vpc_id = module.my_vcp.vpc_id
 }
 
-# module "ecrRepo" {
-#   source = "./modules/ecr"
+module "ecrRepo" {
+  source = "./modules/ecr"
 
-#   ecr_repo_name = local.ecr_repo_name
-# }
-
-module "db_module" {
-  source = "./modules/rds"
-
-  vpc_security_group_ids = module.security_group.sg_id
-  # db_subnet_group_name   = module.my_subnet.db_subnet_group_name
+  ecr_repo_name = local.ecr_repo_name
 }

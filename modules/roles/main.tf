@@ -7,9 +7,8 @@ resource "aws_iam_policy" "full_access_policy" {
     Statement = [
       {
         Action = [
-          "s3:*",
           "ecr:*",
-          "ecs:*",
+          "ecs:*"
         ],
         Effect   = "Allow",
         Resource = "*",
