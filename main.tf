@@ -1,5 +1,5 @@
 # module "jenkins_servers" {
-#   source = "./modules/ec2"
+#   source = "./modules/jenkins"
 
 #   key_name                = module.my_key_pair.key_name
 #   subnet_id               = module.my_subnet.subnet_id
@@ -8,14 +8,14 @@
 #   iam_profile_name        = module.iam_role.profile_name
 # }
 
-module "ecsCluster" {
+module "ecs" {
   source = "./modules/ecs"
 
   demo_app_cluster_name = local.demo_app_cluster_name
   availability_zones    = local.availability_zones
 
   demo_app_task_famliy         = local.demo_app_task_famliy
-  ecr_repo_url                 = module.ecrRepo.repository_url
+  ecr_repo_url                 = module.ecr.repository_url
   container_port               = local.container_port
   demo_app_task_name           = local.demo_app_task_name
   ecs_task_execution_role_name = local.ecs_task_execution_role_name
@@ -23,6 +23,17 @@ module "ecsCluster" {
   application_load_balancer_name = local.application_load_balancer_name
   target_group_name              = local.target_group_name
   demo_app_service_name          = local.demo_app_service_name
+  vpc_id                         = module.network.vpc_id
+  subnet_ids                     = module.network.public_subnet_ids
+}
+
+module "vault" {
+  source = "./modules/vault"
+
+  key_name  = module.my_key_pair.key_name
+  subnet_id = module.network.public_subnet_ids[0]
+  vpc_id    = module.network.vpc_id
+  vpc_cidr  = module.network.vpc_cidr
 }
 
 
@@ -30,29 +41,52 @@ module "my_key_pair" {
   source = "./modules/key_pairs"
 }
 
-module "iam_role" {
-  source = "./modules/roles"
+# module "iam_role" {
+#   source = "./modules/roles"
+# }
+
+# module "my_vcp" {
+#   source = "./modules/vpc"
+# }
+
+# module "my_subnet" {
+#   source = "./modules/subnet"
+
+#   vpc_id     = module.my_vcp.vpc_id
+#   depends_on = [module.my_vcp]
+# }
+
+module "network" {
+  source               = "./modules/network"
+  vpc_cidr             = var.vpc_cidr
+  env                  = var.env
+  public_subnet_cidrs  = var.public_subnet_cidrs
+  private_subnet_cidrs = var.private_subnet_cidrs
 }
 
-module "my_vcp" {
-  source = "./modules/vpc"
-}
+# module "security_group" {
+#   source = "./modules/sg"
 
-module "my_subnet" {
-  source = "./modules/subnet"
+#   vpc_id = module.network.vpc_id
+# }
 
-  vpc_id     = module.my_vcp.vpc_id
-  depends_on = [module.my_vcp]
-}
-
-module "security_group" {
-  source = "./modules/sg"
-
-  vpc_id = module.my_vcp.vpc_id
-}
-
-module "ecrRepo" {
+module "ecr" {
   source = "./modules/ecr"
 
   ecr_repo_name = local.ecr_repo_name
+}
+
+module "rds" {
+  source = "./modules/rds"
+
+  # subnet_ids = module.network.public_subnet_ids
+  subnet_ids = module.network.private_subnet_ids
+  vpc_id     = module.network.vpc_id
+  vpc_cidr   = var.vpc_cidr
+}
+
+module "s3_beckend" {
+  source      = "./modules/s3"
+  bucket_name = local.bucket_name
+  dynamo_name = local.dynamo_name
 }

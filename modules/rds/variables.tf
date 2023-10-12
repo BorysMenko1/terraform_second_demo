@@ -1,6 +1,11 @@
-variable "vpc_security_group_ids" {
-  type = string
+variable "identifier" {
+  type    = string
+  default = "flask-app-db"
 }
+
+# variable "vpc_security_group_ids" {
+#   type = string
+# }
 
 variable "db_name" {
   type    = string
@@ -35,4 +40,21 @@ variable "password" {
 variable "parameter_group_name" {
   type    = string
   default = "default.mysql5.7"
+}
+
+variable "vpc_id" {
+  type = string
+}
+
+variable "vpc_cidr" {
+  type = string
+}
+
+variable "subnet_name" {
+  type    = string
+  default = "rds-subnet-group"
+}
+
+variable "subnet_ids" {
+  type = list(string)
 }

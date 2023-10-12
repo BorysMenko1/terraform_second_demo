@@ -22,6 +22,6 @@ variable "availability_zone" {
 }
 
 variable "db_subnet_group_name" {
-  type        = string
-  default     = "db subnet group"
+  type    = string
+  default = "db subnet group"
 }

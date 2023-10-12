@@ -16,7 +16,7 @@ variable "instance_type" {
 
 variable "key_pare_name" {
   type    = string
-  default = "first_demo_key"
+  default = "third_demo_key"
 }
 
 variable "instance_AMI" {
@@ -30,17 +30,30 @@ variable "app_allowed_ports" {
   default     = ["80", "443", "22", "8080"]
 }
 
-variable "db_name" {
+# ===================NETWORK=======================
+
+variable "vpc_cidr" {
   type    = string
-  default = "ami-0ab1a82de7ca5889c"
+  default = "10.0.0.0/16"
 }
 
-variable "db_username" {
+variable "env" {
   type    = string
-  default = "ami-0ab1a82de7ca5889c"
+  default = "dev"
 }
 
-variable "db_password" {
-  type    = string
-  default = "ami-0ab1a82de7ca5889c"
+variable "public_subnet_cidrs" {
+  type = list(string)
+  default = [
+    "10.0.1.0/24",
+    "10.0.3.0/24"
+  ]
+}
+
+variable "private_subnet_cidrs" {
+  type = list(string)
+  default = [
+    "10.0.2.0/24",
+    "10.0.4.0/24"
+  ]
 }

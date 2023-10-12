@@ -47,3 +47,16 @@ variable "demo_app_service_name" {
   description = "ECS Service Name"
   type        = string
 }
+
+variable "subnet_ids" {
+  type = list(string)
+}
+
+variable "vpc_id" {
+  type = string
+}
+
+variable "db_uri" {
+  type    = string
+  default = "mysql://sonny:qwer1234@flask-app-db.c8tarf4rzgpj.eu-central-1.rds.amazonaws.com:3306/my_db"
+}
