@@ -2,20 +2,6 @@ resource "aws_ecs_cluster" "demo_app_cluster" {
   name = var.demo_app_cluster_name
 }
 
-# resource "aws_default_vpc" "default_vpc" {}
-
-# resource "aws_default_subnet" "default_subnet_a" {
-#   availability_zone = var.availability_zones[0]
-# }
-
-# resource "aws_default_subnet" "default_subnet_b" {
-#   availability_zone = var.availability_zones[1]
-# }
-
-# resource "aws_default_subnet" "default_subnet_c" {
-#   availability_zone = var.availability_zones[2]
-# }
-
 resource "aws_ecs_task_definition" "demo_app_task" {
   family                   = var.demo_app_task_famliy
   container_definitions    = <<DEFINITION
@@ -35,7 +21,7 @@ resource "aws_ecs_task_definition" "demo_app_task" {
       "environment": [
         {
           "name": "SQLALCHEMY_DATABASE_URI",
-          "value": "${var.db_uri}"
+          "value": "mysql://${var.db_username}:${var.db_password}@${var.db_address}:3306/${var.db_name}"
         }
       ]
     }
@@ -60,12 +46,6 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
 
 resource "aws_alb" "application_load_balancer" {
   name = var.application_load_balancer_name
-  # load_balancer_type = "application"
-  # subnets = [
-  #   "${aws_default_subnet.default_subnet_a.id}",
-  #   "${aws_default_subnet.default_subnet_b.id}",
-  #   "${aws_default_subnet.default_subnet_c.id}"
-  # ]
   load_balancer_type = "application"
   subnets            = var.subnet_ids
   security_groups    = ["${aws_security_group.load_balancer_security_group.id}"]
@@ -93,7 +73,6 @@ resource "aws_lb_target_group" "target_group" {
   port        = var.container_port
   protocol    = "HTTP"
   target_type = "ip"
-  #   vpc_id      = aws_default_vpc.default_vpc.id
   vpc_id = var.vpc_id
 }
 
@@ -121,7 +100,6 @@ resource "aws_ecs_service" "demo_app_service" {
   }
 
   network_configuration {
-    # subnets          = ["${aws_default_subnet.default_subnet_a.id}", "${aws_default_subnet.default_subnet_b.id}", "${aws_default_subnet.default_subnet_c.id}"]
     subnets          = var.subnet_ids
     assign_public_ip = true
     security_groups  = ["${aws_security_group.service_security_group.id}"]

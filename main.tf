@@ -25,6 +25,11 @@ module "ecs" {
   demo_app_service_name          = local.demo_app_service_name
   vpc_id                         = module.network.vpc_id
   subnet_ids                     = module.network.public_subnet_ids
+
+  db_name     = data.vault_generic_secret.vault_db_secret.data["db_name"]
+  db_username = data.vault_generic_secret.vault_db_secret.data["db_username"]
+  db_password = data.vault_generic_secret.vault_db_secret.data["db_password"]
+  db_address  = module.rds.db_address
 }
 
 module "vault" {
@@ -36,25 +41,9 @@ module "vault" {
   vpc_cidr  = module.network.vpc_cidr
 }
 
-
 module "my_key_pair" {
   source = "./modules/key_pairs"
 }
-
-# module "iam_role" {
-#   source = "./modules/roles"
-# }
-
-# module "my_vcp" {
-#   source = "./modules/vpc"
-# }
-
-# module "my_subnet" {
-#   source = "./modules/subnet"
-
-#   vpc_id     = module.my_vcp.vpc_id
-#   depends_on = [module.my_vcp]
-# }
 
 module "network" {
   source               = "./modules/network"
@@ -63,12 +52,6 @@ module "network" {
   public_subnet_cidrs  = var.public_subnet_cidrs
   private_subnet_cidrs = var.private_subnet_cidrs
 }
-
-# module "security_group" {
-#   source = "./modules/sg"
-
-#   vpc_id = module.network.vpc_id
-# }
 
 module "ecr" {
   source = "./modules/ecr"
@@ -79,10 +62,13 @@ module "ecr" {
 module "rds" {
   source = "./modules/rds"
 
-  # subnet_ids = module.network.public_subnet_ids
   subnet_ids = module.network.private_subnet_ids
   vpc_id     = module.network.vpc_id
   vpc_cidr   = var.vpc_cidr
+  
+  db_name     = data.vault_generic_secret.vault_db_secret.data["db_name"]
+  db_username = data.vault_generic_secret.vault_db_secret.data["db_username"]
+  db_password = data.vault_generic_secret.vault_db_secret.data["db_password"]
 }
 
 module "s3_beckend" {

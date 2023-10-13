@@ -1,6 +1,3 @@
-
-# ==========AMAZON-NETWORK-CONFIGURATION==========
-
 data "aws_availability_zones" "available" {}
 
 resource "aws_vpc" "main" {
@@ -12,8 +9,6 @@ resource "aws_vpc" "main" {
     Name = "${var.env}-vpc"
   }
 }
-
-# ===================PUBLIC=======================
 
 resource "aws_internet_gateway" "main" {
   vpc_id = aws_vpc.main.id
@@ -51,8 +46,6 @@ resource "aws_route_table_association" "public_routes" {
   route_table_id = aws_route_table.public_subnets.id
   subnet_id      = element(aws_subnet.public_subnets[*].id, count.index)
 }
-
-# ===================PRIVATE=======================
 
 resource "aws_eip" "nat" {
   vpc = true

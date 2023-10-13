@@ -30,8 +30,6 @@ variable "app_allowed_ports" {
   default     = ["80", "443", "22", "8080"]
 }
 
-# ===================NETWORK=======================
-
 variable "vpc_cidr" {
   type    = string
   default = "10.0.0.0/16"

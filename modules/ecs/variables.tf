@@ -56,7 +56,22 @@ variable "vpc_id" {
   type = string
 }
 
-variable "db_uri" {
-  type    = string
-  default = "mysql://sonny:qwer1234@flask-app-db.c8tarf4rzgpj.eu-central-1.rds.amazonaws.com:3306/my_db"
+variable "db_username" {
+  type      = string
+  sensitive = true
+}
+
+variable "db_password" {
+  type      = string
+  sensitive = true
+}
+
+variable "db_name" {
+  type      = string
+  sensitive = true
+}
+
+variable "db_address" {
+  type      = string
+  sensitive = true
 }

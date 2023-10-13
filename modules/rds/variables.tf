@@ -9,7 +9,7 @@ variable "identifier" {
 
 variable "db_name" {
   type    = string
-  default = "my_db"
+  # default = "my_db"
 }
 
 variable "instance_class" {
@@ -27,14 +27,14 @@ variable "engine_version" {
   default = "5.7"
 }
 
-variable "username" {
+variable "db_username" {
   type    = string
-  default = "sonny"
+  # default = "sonny"
 }
 
-variable "password" {
+variable "db_password" {
   type    = string
-  default = "qwer1234"
+  # default = "qwer1234"
 }
 
 variable "parameter_group_name" {
