@@ -1,12 +1,11 @@
-# module "jenkins_servers" {
-#   source = "./modules/jenkins"
+module "jenkins_servers" {
+  source = "./modules/jenkins"
 
-#   key_name                = module.my_key_pair.key_name
-#   subnet_id               = module.my_subnet.subnet_id
-#   vpc_security_group_ids  = module.security_group.sg_id
-#   vpc_security_group_name = module.security_group.sg_name
-#   iam_profile_name        = module.iam_role.profile_name
-# }
+  key_name                = module.my_key_pair.key_name
+  subnet_id               = module.network.public_subnet_ids[0]
+  vpc_id                  = module.network.vpc_id
+  # iam_profile_name        = module.iam_role.profile_name
+}
 
 module "ecs" {
   source = "./modules/ecs"

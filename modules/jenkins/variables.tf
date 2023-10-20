@@ -2,13 +2,13 @@ variable "subnet_id" {}
 
 variable "key_name" {}
 
-variable "vpc_security_group_ids" {
+variable "vpc_id" {
   type = string
 }
 
-variable "iam_profile_name" {
-  type = string
-}
+# variable "iam_profile_name" {
+#   type = string
+# }
 
 variable "instance_type" {
   type    = string
