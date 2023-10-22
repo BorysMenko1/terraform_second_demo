@@ -18,10 +18,22 @@ resource "aws_ecs_task_definition" "demo_app_task" {
       ],
       "memory": 512,
       "cpu": 256,
-      "environment": [
+      "secrets": [
         {
-          "name": "SQLALCHEMY_DATABASE_URI",
-          "value": "mysql://${var.db_username}:${var.db_password}@${var.db_address}:3306/${var.db_name}"
+          "name": "DB_USERNAME", 
+          "valueFrom": "arn:aws:ssm:${var.region}:${var.account_id}:parameter/DB_USERNAME"
+        },
+        {
+          "name": "DB_PASSWORD", 
+          "valueFrom": "arn:aws:ssm:${var.region}:${var.account_id}:parameter/DB_PASSWORD"
+        },
+        {
+          "name": "DB_ADDRESS", 
+          "valueFrom": "arn:aws:ssm:${var.region}:${var.account_id}:parameter/DB_ADDRESS"
+        },
+        {
+          "name": "DB_NAME", 
+          "valueFrom": "arn:aws:ssm:${var.region}:${var.account_id}:parameter/DB_NAME"
         }
       ]
     }
@@ -42,6 +54,11 @@ resource "aws_iam_role" "ecs_task_execution_role" {
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
   role       = aws_iam_role.ecs_task_execution_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "read_ssm_secret_role_policy" {
+  role       = aws_iam_role.ecs_task_execution_role.name
+  policy_arn = "arn:aws:iam::655612179847:policy/ReadSsmSecret"
 }
 
 resource "aws_alb" "application_load_balancer" {

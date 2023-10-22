@@ -4,7 +4,6 @@ module "jenkins_servers" {
   key_name                = module.my_key_pair.key_name
   subnet_id               = module.network.public_subnet_ids[0]
   vpc_id                  = module.network.vpc_id
-  # iam_profile_name        = module.iam_role.profile_name
 }
 
 module "ecs" {
@@ -24,11 +23,10 @@ module "ecs" {
   demo_app_service_name          = local.demo_app_service_name
   vpc_id                         = module.network.vpc_id
   subnet_ids                     = module.network.public_subnet_ids
+  region = var.region
 
-  db_name     = data.vault_generic_secret.vault_db_secret.data["db_name"]
-  db_username = data.vault_generic_secret.vault_db_secret.data["db_username"]
-  db_password = data.vault_generic_secret.vault_db_secret.data["db_password"]
   db_address  = module.rds.db_address
+  account_id = data.vault_generic_secret.vault_aws_secret.data["account_id"]
 }
 
 module "vault" {
@@ -61,7 +59,7 @@ module "ecr" {
 module "rds" {
   source = "./modules/rds"
 
-  subnet_ids = module.network.private_subnet_ids
+  subnet_ids = module.network.public_subnet_ids
   vpc_id     = module.network.vpc_id
   vpc_cidr   = var.vpc_cidr
   

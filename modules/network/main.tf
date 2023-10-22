@@ -48,7 +48,7 @@ resource "aws_route_table_association" "public_routes" {
 }
 
 resource "aws_eip" "nat" {
-  vpc = true
+  # vpc = true
 
   tags = {
     Name = "${var.env}-nat-gw-eip"

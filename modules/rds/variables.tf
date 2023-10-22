@@ -8,7 +8,7 @@ variable "identifier" {
 # }
 
 variable "db_name" {
-  type    = string
+  type = string
   # default = "my_db"
 }
 
@@ -28,12 +28,12 @@ variable "engine_version" {
 }
 
 variable "db_username" {
-  type    = string
+  type = string
   # default = "sonny"
 }
 
 variable "db_password" {
-  type    = string
+  type = string
   # default = "qwer1234"
 }
 
