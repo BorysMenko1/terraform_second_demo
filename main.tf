@@ -26,17 +26,17 @@ module "ecs" {
   region = var.region
 
   db_address  = module.rds.db_address
-  account_id = data.vault_generic_secret.vault_aws_secret.data["account_id"]
+  account_id = data.vault_generic_secret.vault_db_secret.data["account_id"]
 }
 
-module "vault" {
-  source = "./modules/vault"
+# module "vault" {
+#   source = "./modules/vault"
 
-  key_name  = module.my_key_pair.key_name
-  subnet_id = module.network.public_subnet_ids[0]
-  vpc_id    = module.network.vpc_id
-  vpc_cidr  = module.network.vpc_cidr
-}
+#   key_name  = module.my_key_pair.key_name
+#   subnet_id = module.network.public_subnet_ids[0]
+#   vpc_id    = module.network.vpc_id
+#   vpc_cidr  = module.network.vpc_cidr
+# }
 
 module "my_key_pair" {
   source = "./modules/key_pairs"

@@ -28,12 +28,14 @@ resource "aws_ecs_task_definition" "demo_app_task" {
           "valueFrom": "arn:aws:ssm:${var.region}:${var.account_id}:parameter/DB_PASSWORD"
         },
         {
-          "name": "DB_ADDRESS", 
-          "valueFrom": "arn:aws:ssm:${var.region}:${var.account_id}:parameter/DB_ADDRESS"
-        },
-        {
           "name": "DB_NAME", 
           "valueFrom": "arn:aws:ssm:${var.region}:${var.account_id}:parameter/DB_NAME"
+        }
+      ],
+      "environment": [
+        {
+          "name": "DB_ADDRESS",
+          "value": "${var.db_address}"
         }
       ]
     }
